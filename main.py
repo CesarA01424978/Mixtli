@@ -12,8 +12,8 @@ def detect_circles_in_roi(image, x_center, y_center, roi_width, roi_height):
     global circulosDetectados
     
     # Definir la región de interés (ROI) centrada en (x_center, y_center)
-    x = int(x_center - roi_width/2)
-    y = int(y_center - roi_height/2)
+    x = x_center - roi_width//2
+    y = y_center - roi_height//2
     roi = image[y:y+roi_height, x:x+roi_width]
     
     # Convertir la ROI a escala de grises
@@ -36,8 +36,21 @@ def detect_circles_in_roi(image, x_center, y_center, roi_width, roi_height):
             cv2.rectangle(image, (x_circle - 5, y_circle - 5), (x_circle + 5, y_circle + 5), (0, 128, 255), -1)
         circulosDetectados += 1
         
-    
     return image
+
+# Dibuja la maya de los límites
+def printMaya(image, width, height):
+    
+    # Horizontales
+    cv2.line(image, (0, int(height*(1/3))), (width*2, int(height*(1/3))), (255, 255, 255), 1) 
+    #print(height*(1/3), height*(2/3))
+    #cv2.line(image, (0, int(6.6*height/10)), (width*2, int(6.6*height/10)), (255, 255, 255), 1) 
+    
+    # Verticales
+    #cv2.line(image, (3*width//10, 0), (3*width//10, height), (255, 255, 255), 1)
+    #cv2.line(image, (6*width//10, 0), (6*width//10, height), (255, 255, 255), 1)
+    
+
 
 # Tamaño de la región de interés (ROI) centrada en el centro de la pantalla
 roi_width = 300
@@ -54,11 +67,17 @@ while True:
         height, width = frame.shape[:2]
         
         # Calcular las coordenadas del centro de la pantalla
-        x_center = int(width / 2)
-        y_center = int(height / 2)
+        x_center = width // 2
+        y_center = height // 2
         
         # Detectar círculos en el área central de la imagen
         detected_frame = detect_circles_in_roi(frame, x_center, y_center, roi_width, roi_height)
+        
+        # Imprimir la maya
+        printMaya(frame, height, width)
+        #print(height, width)
+        
+        
         print("Circulos detectados:", circulosDetectados)
         
         # Mostrar el fotograma con círculos detectados
