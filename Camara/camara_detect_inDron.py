@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+from djitellopy import Tello
+import cv2, math, time
 
 # Función para detectar círculos en una región de interés (ROI) de la imagen
 def detect_circles_in_roi(image, x_center, y_center, roi_width, roi_height):
@@ -33,8 +35,11 @@ def detect_circles_in_roi(image, x_center, y_center, roi_width, roi_height):
 roi_width = 300
 roi_height = 300
 
-# Inicializar la cámara
-cap = cv2.VideoCapture(0)
+tello = Tello() # Inicializamos el objeto Tello
+tello.connect() # Conectamos con el Tello
+print(tello.get_battery())
+tello.streamon() # Iniciamos el streaming de video
+cap = tello.get_frame_read() # Obtenemos el frame del video
 
 while True:
     ret, frame = cap.read()
